@@ -13,6 +13,8 @@ let cardNums = ['ace',2,3,4,5,6,7,8,9,10,'jack','queen','king'];
 let deck = [];
 let cardCount = 0;
 let gameStatus = 0;
+let dealerHidden = 0;
+let dealerUp = 0;
 
 
 for(suit in cardSuites){
@@ -54,15 +56,19 @@ function dealCards(){
         dealersHand.push(deck[cardCount]);
         if (i == 0){
             dealersHold.innerHTML += `<img src=PNG-cards/pokemoncard.png>`;
+            dealerHidden = cardCount;
         } else{
             dealersHold.innerHTML += `<img src=PNG-cards/${deck[cardCount].number}_of_${deck[cardCount].suites}.png>`;
             dealerValue.innerHTML = `${deck[cardCount].value}`;
+            dealerUp = cardCount;
         }
         cardCounter();
     }
     let playerCounter = aceCheck(playersHand);
-    if (playerCounter == 21 && playersHand.length == 2){
-        gameOver();
+    dealerCounter = aceCheck(dealersHand);
+    if ((playerCounter == 21 && playersHand.length == 2) || (dealerCounter == 21 && dealersHand.length == 2)){
+        dealerCounter = dealerCounter;
+        gameOver(dealerCounter);
     }
     playerValue.innerHTML = playerCounter;
 }
@@ -90,18 +96,18 @@ function aceCheck(whosCard){
             checkValue = checkValue + 10;
         }
         checkValue = checkValue + whosCard[i].value;
+        console.log(i+'-'+whosCard[i].key+' CARD VALUE: '+whosCard[i].value);
     }
 
     if (hasAce && checkValue > 21){
         checkValue = checkValue - 10;
-        }
+    }
        return checkValue; 
 }
 
-function gameOver(){
-    dealersHold.innerHTML = `<img src=PNG-cards/${deck[1].number}_of_${deck[1].suites}.png><img src=PNG-cards/${deck[3].number}_of_${deck[3].suites}.png>`;
-    dealerCounter = parseInt(deck[1].value) + parseInt(deck[3].value);
-    dealerValue.innerHTML = dealerCounter;
+function gameOver(dealerCount){
+    dealersHold.innerHTML = `<img src=PNG-cards/${deck[dealerHidden].number}_of_${deck[dealerHidden].suites}.png><img src=PNG-cards/${deck[dealerUp].number}_of_${deck[dealerUp].suites}.png>`;
+    dealerValue.innerHTML = dealerCount;
 }
 
 startButton.addEventListener('click',startGame)
