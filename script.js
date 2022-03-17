@@ -76,7 +76,7 @@ function dealCards(){
     dealerCounter = aceCheck(dealersHand);
     if ((playerCounter == 21 && playersHand.length == 2) || (dealerCounter == 21 && dealersHand.length == 2)){
         dealerCounter = dealerCounter;
-        gameOver(dealerCounter, playerCounter);
+        gameOver(dealerCounter, dealersHand, playerCounter, playersHand);
     } else {
 		playerValue.innerHTML = playerCounter;
 		if(dealersUpValue == 1){
@@ -109,7 +109,7 @@ function aceCheck(whosCard){
             checkValue = checkValue + 10;
         }
         checkValue = checkValue + whosCard[i].value;
-        console.log(i+'-'+whosCard[i].key+' CARD VALUE: '+whosCard[i].value);
+        //console.log(i+'-'+whosCard[i].key+' CARD VALUE: '+whosCard[i].value);
     }
 
     if (hasAce && checkValue > 21){
@@ -118,11 +118,23 @@ function aceCheck(whosCard){
        return checkValue; 
 }
 
-function gameOver(dealerCount, playerCount){
+function gameOver(dealerCount, dealersHand, playerCount, playersHand){
     gameStatus = 0;
     dealersHold.innerHTML = `<img src=PNG-cards/${deck[dealerHidden].number}_of_${deck[dealerHidden].suites}.png><img src=PNG-cards/${deck[dealerUp].number}_of_${deck[dealerUp].suites}.png>`;
     dealerValue.innerHTML = dealerCount;
     playerValue.innerHTML = playerCount;
+
+    if(playerCount > 22){
+        console.log('LOSER! Player Bust');
+    } else if(dealerCount > 22 && playerCount < 22){
+        console.log('WINNER! Dealer Bust');
+    } else if(dealerCount == 21 && dealersHand.length == 2 && playerCount != 21){
+        console.log('LOSER! Dealer has BlackJack');
+    } else if(playerCount == 21 && playersHand.length == 2 && dealerCount != 21){
+        console.log('WINNER! Player has BlackJack');
+    } else if(playerCount == dealerCount){
+        console.log('PUSH');
+    }
 }
 
 startButton.addEventListener('click',startGame)
