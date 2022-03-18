@@ -8,18 +8,22 @@
     <link rel="stylesheet" href="style.css">
 </head>
 <body>
-    <h1>Blackjack</h1>
-    <button id="startButton">Start Game</button>
-    <div id="dealerContainer">
-        <h2>Dealer's Hand: <span id="dealerValue"></span></h2>
-        <div id="dealersCards"><span id="dealersVisibleCards"></span><span id="dealersHitCards"></span></div>
+    <div id="main">
+        <div id="dealerContainer">
+            <h2>Dealer's Hand: <span id="dealerValue"></span></h2>
+            <div id="dealersCards"><span id="dealersVisibleCards"></span><span id="dealersHitCards"></span></div>
+        </div>
+        <div id="playerContainer">
+            <h2>Player's Hand: <span id="playerValue"></span></h2>
+            <div id="playersCards"></div>
+        </div>
+        <div id="overlay">
+            <div id="gameResults">BlackJack 21</div>
+            <button id="startButton">Deal Cards</button>
+        </div>
+        <button id="hitButton">Hit</button>
+        <button id="stayButton">Stay</button>
+        <script src="script.js"></script>
     </div>
-    <div id="playerContainer">
-        <h2>Player's Hand: <span id="playerValue"></span></h2>
-        <div id="playersCards"></div>
-    </div>
-    <button id="hitButton">Hit</button>
-    <button id="stayButton">Stay</button>
-    <script src="script.js"></script>
 </body>
 </html>

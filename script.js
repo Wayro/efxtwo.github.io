@@ -2,6 +2,8 @@ console.log('working')
 
 const stayButton = document.getElementById('stayButton');
 const hitButton = document.getElementById('hitButton');
+const overLay = document.getElementById('overlay');
+const gameResults = document.getElementById('gameResults');
 const startButton = document.getElementById('startButton');
 const playersHold = document.getElementById('playersCards');
 const dealersHold = document.getElementById('dealersCards');
@@ -46,6 +48,9 @@ function shuffleDeck(array) {    //shuffling the deck, order of cards get re-arr
   }
 
 function dealCards(){
+    overLay.style.display = 'none';
+    hitButton.style.display = 'unset';
+    stayButton.style.display = 'unset';
     let playersDealtHand = [];
     let dealersDealtHand = [];
     let dealerCounter = 0;
@@ -155,10 +160,12 @@ function gameOver(){
     playerValue.innerHTML = playerCount;
 
     if(playerCount > 21){
-        console.log('LOSER! Player Bust');
+        gameResults.innerHTML = 'You Lose<br />Player BUST';
+        setTimeout(() => {overLay.style.display = 'unset';}, delayTimer*1000*2);
     } else if(playerCount <= 21 && dealerCount < 17){
         if(playerCount == 21 && playersHand.length == 2 && dealerCount != 21){
-            console.log('WINNER! Player has BlackJack');
+            gameResults.innerHTML = 'You Win!<br />Player BlackJack';
+            setTimeout(() => {overLay.style.display = 'unset';}, delayTimer*1000*2);
         } else {
             console.log('Dealer, take a hit');
             function dealerHit(){
@@ -171,21 +178,29 @@ function gameOver(){
             setTimeout(() => {dealerHit()}, delayTimer*1000*2);
         }
     } else if(dealerCount > 22 && playerCount < 22){
-        console.log('WINNER! Dealer Bust');
+        gameResults.innerHTML = 'You Win!<br />Dealer BUST';
+        setTimeout(() => {overLay.style.display = 'unset';}, delayTimer*1000*2);
     } else if(dealerCount == 21 && dealersHand.length == 2 && playerCount != 21){
-        console.log('LOSER! Dealer has BlackJack');
+        gameResults.innerHTML = 'You Lose!<br />Dealer BlackJack';
+        setTimeout(() => {overLay.style.display = 'unset';}, delayTimer*1000*2);
     } else if(playerCount == 21 && playersHand.length == 2 && dealerCount != 21){
-        console.log('WINNER! Player has BlackJack');
+        gameResults.innerHTML = 'You Win!<br />Player BlackJack';
+        setTimeout(() => {overLay.style.display = 'unset';}, delayTimer*1000*2);
     } else if(playerCount == dealerCount){
-        console.log('PUSH');
+        gameResults.innerHTML = 'Game Over<br />Player Dealer PUSH';
+        setTimeout(() => {overLay.style.display = 'unset';}, delayTimer*1000*2);
     } else if(playerCount <= 21 && dealerCount >= 17 && dealerCount < 22){
         if(playerCount > dealerCount){
-            console.log('WINNER! Higher Cards');
+            gameResults.innerHTML = 'You Win!<br />Player has higher cards';
+            setTimeout(() => {overLay.style.display = 'unset';}, delayTimer*1000*2);
         } else {
-            console.log('LOSER! Dealer has higher cards');
+            gameResults.innerHTML = 'You Lose!<br />Dealer has higher cards';
+            setTimeout(() => {overLay.style.display = 'unset';}, delayTimer*1000*2);
         }
     } 
     dealerValue.innerHTML = dealerCount;
+    hitButton.style.display = "none";
+    stayButton.style.display = "none";
 }
 startButton.addEventListener('click',startGame);
 function hit(){
