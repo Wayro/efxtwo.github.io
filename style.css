@@ -1,4 +1,4 @@
-body {
+html, body {
     font-family: 'Helvetica', Arial, sans-serif;
     margin: 0;
     padding: 0;
@@ -10,17 +10,20 @@ img{
 }
 #main {
     position: relative;
-    width: 900px;
-    height: 500px;
+    width: 100%;
+    height: 100%;
     margin: 0;
     padding: 10px;
-    background-image: url('PNG-cards/bj_table.png');
+    background-image: url('PNG-cards/blackjacktable.png');
     background-repeat: no-repeat;
-    background-size: cover;
+    background-size: 100% 100%;
     text-align: center;
 }
 #dealersCards, #playersCards {
     height: 165px;
+}
+#dealerContainer, #playerContainer {
+    height: 50%;
 }
 #dealerContainer h2, #playerContainer h2 {
     padding-top: 10px;   
@@ -45,4 +48,12 @@ img{
 }
 #hitButton, #stayButton {
     display: none;
+}
+#discardCards, #dealerShoe{
+    position: absolute;
+    top: 50%; bottom: 50%;
+    margin: auto 5%;
+}
+#dealerShoe {
+    right: 0;
 }

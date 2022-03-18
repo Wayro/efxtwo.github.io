@@ -22,6 +22,7 @@ let dealerHidden = 0;
 let dealerUp = 0;
 let playersHand = [];
 let dealersHand = [];
+let numberOfDecks = 2;
 
 function createdeck(){
     for(suit in cardSuites){
@@ -62,7 +63,9 @@ function dealCards(){
     playerValue.innerHTML = '';
     dealerValue.innerHTML = '';
     if(initialGame){
-		createdeck();
+        for(i=0; i<numberOfDecks; i++){
+            createdeck();
+        }
 		shuffleDeck(deck);
 		cardCount = 0;
 		initialGame = false;
@@ -123,7 +126,7 @@ function dealCards(){
 }
 
 function cardCounter(){
-    if (cardCount > 29){
+    if (cardCount > 29*numberOfDecks){
         initialGame = true;
     }
 }
