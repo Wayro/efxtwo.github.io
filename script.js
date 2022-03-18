@@ -114,7 +114,7 @@ function dealCards(){
     cardCounter();
     playersHand = playersDealtHand;
     dealersHand = dealersDealtHand;
-    console.log(playersHand);
+    //console.log(playersHand);
 }
 
 function cardCounter(){
@@ -199,8 +199,12 @@ function hit(){
         cardCount++;
         cardCounter();
         playersHand = playersHand;
-        console.log(playersHand);
+    }
+}
+function stay(){
+    if(gameStatus == 1){
+        gameOver();
     }
 }
 hitButton.addEventListener('click',hit);
-stayButton.addEventListener('click',gameOver);
+stayButton.addEventListener('click',stay);
