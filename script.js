@@ -7,6 +7,8 @@ const playersHold = document.getElementById('playersCards');
 const dealersHold = document.getElementById('dealersCards');
 const playerValue = document.getElementById('playerValue');
 const dealerValue = document.getElementById('dealerValue');
+const dealersVisibleCards = document.getElementById('dealersVisibleCards');
+const dealersHitCards = document.getElementById('dealersHitCards');
 
 let cardSuites = ['clubs','hearts','diamonds','spades'];
 let cardNums = ['ace',2,3,4,5,6,7,8,9,10,'jack','queen','king'];
@@ -16,6 +18,8 @@ let cardCount = 0;
 let gameStatus = 0;
 let dealerHidden = 0;
 let dealerUp = 0;
+let playersHand = [];
+let dealersHand = [];
 
 function createdeck(){
     for(suit in cardSuites){
@@ -42,13 +46,14 @@ function shuffleDeck(array) {    //shuffling the deck, order of cards get re-arr
   }
 
 function dealCards(){
-    let playersHand =[];
-    let dealersHand = [];
+    let playersDealtHand = [];
+    let dealersDealtHand = [];
     let dealerCounter = 0;
 	let dealersUpValue = 0;
     gameStatus = 1;
     playersHold.innerHTML = '';
-    dealersHold.innerHTML = '';
+    dealersVisibleCards.innerHTML = '';
+    dealersHitCards.innerHTML = '';
     playerValue.innerHTML = '';
     dealerValue.innerHTML = '';
     if(initialGame){
@@ -63,7 +68,7 @@ function dealCards(){
     let pCardSecond = [];
     let dCardSecond = [];
     for(i=0; i<2; i++){
-        playersHand.push(deck[cardCount]);
+        playersDealtHand.push(deck[cardCount]);
         if (i == 0){
             pCardFirstImg = `<img src=PNG-cards/${deck[cardCount].number}_of_${deck[cardCount].suites}.png>`;
             pCardFirstValue = deck[cardCount].value;
@@ -76,7 +81,7 @@ function dealCards(){
         // playerCounter = parseInt(playerCounter) + parseInt(`${deck[cardCount].value}`);
         cardCount++;
 
-        dealersHand.push(deck[cardCount]);
+        dealersDealtHand.push(deck[cardCount]);
         if (i == 0){
             dCardFirst.push('<img src=PNG-cards/pokemoncard.png>',0);
             dealerHidden = cardCount;
@@ -91,12 +96,12 @@ function dealCards(){
     }
     delayTimer = .25;
     setTimeout(() => {playersHold.innerHTML = pCardFirst[0]; playerValue.innerHTML = pCardFirst[1]}, delayTimer*1000);
-    setTimeout(() => {dealersHold.innerHTML = dCardFirst[0]}, delayTimer*1000*2);
+    setTimeout(() => {dealersVisibleCards.innerHTML = dCardFirst[0]}, delayTimer*1000*2);
     setTimeout(() => {playersHold.innerHTML += pCardSecond[0]; playerValue.innerHTML = parseInt(pCardSecond[1]+pCardFirst[1])}, delayTimer*1000*3);
-    setTimeout(() => {dealersHold.innerHTML += dCardSecond[0]}, delayTimer*1000*4);
-    setTimeout(() => {let playerCounter = aceCheck(playersHand); dealerCounter = aceCheck(dealersHand);if ((playerCounter == 21 && playersHand.length == 2) || (dealerCounter == 21 && dealersHand.length == 2)){
+    setTimeout(() => {dealersVisibleCards.innerHTML += dCardSecond[0]}, delayTimer*1000*4);
+    setTimeout(() => {let playerCounter = aceCheck(playersDealtHand); dealerCounter = aceCheck(dealersDealtHand);if ((playerCounter == 21 && playersDealtHand.length == 2) || (dealerCounter == 21 && dealersDealtHand.length == 2)){
         dealerCounter = dealerCounter;
-        gameOver(dealerCounter, dealersHand, playerCounter, playersHand);
+        gameOver();
     } else {
 		playerValue.innerHTML = playerCounter;
 		if(dealersUpValue == 1){
@@ -107,6 +112,9 @@ function dealCards(){
 	}}, delayTimer*1000*5);
     
     cardCounter();
+    playersHand = playersDealtHand;
+    dealersHand = dealersDealtHand;
+    console.log(playersHand);
 }
 
 function cardCounter(){
@@ -139,23 +147,54 @@ function aceCheck(whosCard){
        return checkValue; 
 }
 
-function gameOver(dealerCount, dealersHand, playerCount, playersHand){
+function gameOver(){
+    dealerCount = aceCheck(dealersHand);
+    playerCount = aceCheck(playersHand);
     gameStatus = 0;
-    dealersHold.innerHTML = `<img src=PNG-cards/${deck[dealerHidden].number}_of_${deck[dealerHidden].suites}.png><img src=PNG-cards/${deck[dealerUp].number}_of_${deck[dealerUp].suites}.png>`;
-    dealerValue.innerHTML = dealerCount;
+    dealersVisibleCards.innerHTML = `<img src=PNG-cards/${deck[dealerHidden].number}_of_${deck[dealerHidden].suites}.png><img src=PNG-cards/${deck[dealerUp].number}_of_${deck[dealerUp].suites}.png>`;
     playerValue.innerHTML = playerCount;
 
     if(playerCount > 22){
         console.log('LOSER! Player Bust');
+    } else if(playerCount <= 21 && dealerCount < 17){
+        console.log('Dealer, take a hit');
+        function dealerHit(){
+            dealersHand.push(deck[cardCount]);
+            dealersHitCards.innerHTML += `<img src=PNG-cards/${deck[cardCount].number}_of_${deck[cardCount].suites}.png>`;
+            dealerValue.innerHTML = aceCheck(dealersHand);
+            cardCount ++;
+            gameOver();
+        }
+        setTimeout(() => {dealerHit()}, delayTimer*1000*2);
+    } else if(playerCount <= 21 && dealerCount >= 17 && dealerCount < 22){
+        if(playerCount > dealerCount){
+            console.log('WINNER! Higher Cards');
+        } else {
+            console.log('LOSER! Dealer has higher cards');
+        }
     } else if(dealerCount > 22 && playerCount < 22){
         console.log('WINNER! Dealer Bust');
     } else if(dealerCount == 21 && dealersHand.length == 2 && playerCount != 21){
         console.log('LOSER! Dealer has BlackJack');
     } else if(playerCount == 21 && playersHand.length == 2 && dealerCount != 21){
         console.log('WINNER! Player has BlackJack');
-    } else if(playerCount == dealerCount){
-        console.log('PUSH');
+    }
+    dealerValue.innerHTML = dealerCount;
+}
+startButton.addEventListener('click',startGame);
+function hit(){
+    if(gameStatus == 1){
+        playersHand.push(deck[cardCount]);
+        playersHold.innerHTML += `<img src=PNG-cards/${deck[cardCount].number}_of_${deck[cardCount].suites}.png>`;
+        playerValue.innerHTML = aceCheck(playersHand);
+        if(aceCheck(playersHand) >= 21){
+            gameOver();
+        }
+        cardCount++;
+        cardCounter();
+        playersHand = playersHand;
+        console.log(playersHand);
     }
 }
-
-startButton.addEventListener('click',startGame)
+hitButton.addEventListener('click',hit);
+stayButton.addEventListener('click',gameOver);
