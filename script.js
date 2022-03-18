@@ -154,23 +154,21 @@ function gameOver(){
     dealersVisibleCards.innerHTML = `<img src=PNG-cards/${deck[dealerHidden].number}_of_${deck[dealerHidden].suites}.png><img src=PNG-cards/${deck[dealerUp].number}_of_${deck[dealerUp].suites}.png>`;
     playerValue.innerHTML = playerCount;
 
-    if(playerCount > 22){
+    if(playerCount > 21){
         console.log('LOSER! Player Bust');
     } else if(playerCount <= 21 && dealerCount < 17){
-        console.log('Dealer, take a hit');
-        function dealerHit(){
-            dealersHand.push(deck[cardCount]);
-            dealersHitCards.innerHTML += `<img src=PNG-cards/${deck[cardCount].number}_of_${deck[cardCount].suites}.png>`;
-            dealerValue.innerHTML = aceCheck(dealersHand);
-            cardCount ++;
-            gameOver();
-        }
-        setTimeout(() => {dealerHit()}, delayTimer*1000*2);
-    } else if(playerCount <= 21 && dealerCount >= 17 && dealerCount < 22){
-        if(playerCount > dealerCount){
-            console.log('WINNER! Higher Cards');
+        if(playerCount == 21 && playersHand.length == 2 && dealerCount != 21){
+            console.log('WINNER! Player has BlackJack');
         } else {
-            console.log('LOSER! Dealer has higher cards');
+            console.log('Dealer, take a hit');
+            function dealerHit(){
+                dealersHand.push(deck[cardCount]);
+                dealersHitCards.innerHTML += `<img src=PNG-cards/${deck[cardCount].number}_of_${deck[cardCount].suites}.png>`;
+                dealerValue.innerHTML = aceCheck(dealersHand);
+                cardCount ++;
+                gameOver();
+            }
+            setTimeout(() => {dealerHit()}, delayTimer*1000*2);
         }
     } else if(dealerCount > 22 && playerCount < 22){
         console.log('WINNER! Dealer Bust');
@@ -178,7 +176,15 @@ function gameOver(){
         console.log('LOSER! Dealer has BlackJack');
     } else if(playerCount == 21 && playersHand.length == 2 && dealerCount != 21){
         console.log('WINNER! Player has BlackJack');
-    }
+    } else if(playerCount == dealerCount){
+        console.log('PUSH');
+    } else if(playerCount <= 21 && dealerCount >= 17 && dealerCount < 22){
+        if(playerCount > dealerCount){
+            console.log('WINNER! Higher Cards');
+        } else {
+            console.log('LOSER! Dealer has higher cards');
+        }
+    } 
     dealerValue.innerHTML = dealerCount;
 }
 startButton.addEventListener('click',startGame);
