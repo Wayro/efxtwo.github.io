@@ -1,3 +1,6 @@
 img{
     max-width:100px;
 }
+#dealersCards, #playersCards {
+    height: 145px;
+}

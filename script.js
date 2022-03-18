@@ -49,6 +49,8 @@ function dealCards(){
     gameStatus = 1;
     playersHold.innerHTML = '';
     dealersHold.innerHTML = '';
+    playerValue.innerHTML = '';
+    dealerValue.innerHTML = '';
     if(initialGame){
 		createdeck();
 		shuffleDeck(deck);
@@ -56,25 +58,43 @@ function dealCards(){
 		initialGame = false;
 	}
     
+    let pCardFirst = [];
+    let dCardFirst = [];
+    let pCardSecond = [];
+    let dCardSecond = [];
     for(i=0; i<2; i++){
         playersHand.push(deck[cardCount]);
-        playersHold.innerHTML += `<img src=PNG-cards/${deck[cardCount].number}_of_${deck[cardCount].suites}.png>`;
+        if (i == 0){
+            pCardFirstImg = `<img src=PNG-cards/${deck[cardCount].number}_of_${deck[cardCount].suites}.png>`;
+            pCardFirstValue = deck[cardCount].value;
+            pCardFirst.push(pCardFirstImg,pCardFirstValue);
+        } else {
+            pCardSecondImg = `<img src=PNG-cards/${deck[cardCount].number}_of_${deck[cardCount].suites}.png>`;
+            pCardSecondValue = deck[cardCount].value;
+            pCardSecond.push(pCardSecondImg,pCardSecondValue);
+        }
         // playerCounter = parseInt(playerCounter) + parseInt(`${deck[cardCount].value}`);
         cardCount++;
+
         dealersHand.push(deck[cardCount]);
         if (i == 0){
-            dealersHold.innerHTML += `<img src=PNG-cards/pokemoncard.png>`;
+            dCardFirst.push('<img src=PNG-cards/pokemoncard.png>',0);
             dealerHidden = cardCount;
         } else{
-            dealersHold.innerHTML += `<img src=PNG-cards/${deck[cardCount].number}_of_${deck[cardCount].suites}.png>`;
+            dCardSecondImg = `<img src=PNG-cards/${deck[cardCount].number}_of_${deck[cardCount].suites}.png>`;
+            dCardSecondValue = deck[cardCount].value;
+            dCardSecond.push(dCardSecondImg,dCardSecondValue);
             dealersUpValue = parseInt(dealersUpValue)+parseInt(`${deck[cardCount].value}`);
             dealerUp = cardCount;
         }
         cardCount++;
     }
-    let playerCounter = aceCheck(playersHand);
-    dealerCounter = aceCheck(dealersHand);
-    if ((playerCounter == 21 && playersHand.length == 2) || (dealerCounter == 21 && dealersHand.length == 2)){
+    delayTimer = .25;
+    setTimeout(() => {playersHold.innerHTML = pCardFirst[0]; playerValue.innerHTML = pCardFirst[1]}, delayTimer*1000);
+    setTimeout(() => {dealersHold.innerHTML = dCardFirst[0]}, delayTimer*1000*2);
+    setTimeout(() => {playersHold.innerHTML += pCardSecond[0]; playerValue.innerHTML = parseInt(pCardSecond[1]+pCardFirst[1])}, delayTimer*1000*3);
+    setTimeout(() => {dealersHold.innerHTML += dCardSecond[0]}, delayTimer*1000*4);
+    setTimeout(() => {let playerCounter = aceCheck(playersHand); dealerCounter = aceCheck(dealersHand);if ((playerCounter == 21 && playersHand.length == 2) || (dealerCounter == 21 && dealersHand.length == 2)){
         dealerCounter = dealerCounter;
         gameOver(dealerCounter, dealersHand, playerCounter, playersHand);
     } else {
@@ -84,7 +104,8 @@ function dealCards(){
 		} else {
 			dealerValue.innerHTML = dealersUpValue;
 		}
-	}
+	}}, delayTimer*1000*5);
+    
     cardCounter();
 }
 
