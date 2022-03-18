@@ -13,7 +13,7 @@ img{
     width: 100%;
     height: 100%;
     margin: 0;
-    padding-top: 10px;
+    padding: 0;
     background-image: url('PNG-cards/blackjacktable.png');
     background-repeat: no-repeat;
     background-size: 100% 100%;
@@ -23,13 +23,14 @@ img{
     height: 165px;
 }
 #dealerContainer, #playerContainer {
-    height: 45%;
+    height: 40%;
 }
 #dealerContainer h2, #playerContainer h2 {
-    padding-top: 10px;   
     color: #fff;
     font-weight: normal;
     font-size: 16pt;
+    margin: 0;
+    padding-top: 10px;
 }
 #overlay {
     display: block;

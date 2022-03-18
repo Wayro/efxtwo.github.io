@@ -180,7 +180,7 @@ function gameOver(){
             }
             setTimeout(() => {dealerHit()}, delayTimer*1000*2);
         }
-    } else if(dealerCount > 22 && playerCount < 22){
+    } else if(dealerCount > 21 && playerCount < 22){
         gameResults.innerHTML = 'You Win!<br />Dealer BUST';
         setTimeout(() => {overLay.style.display = 'unset';}, delayTimer*1000*2);
     } else if(dealerCount == 21 && dealersHand.length == 2 && playerCount != 21){
