@@ -23,6 +23,7 @@ let dealerUp = 0;
 let playersHand = [];
 let dealersHand = [];
 let numberOfDecks = 2;
+let casinoCounter = 0;
 
 function createdeck(){
     for(suit in cardSuites){
@@ -69,6 +70,7 @@ function dealCards(){
 		shuffleDeck(deck);
 		cardCount = 0;
 		initialGame = false;
+        console.log('Deck Shuffled');
 	}
     
     let pCardFirst = [];
@@ -87,6 +89,7 @@ function dealCards(){
             pCardSecond.push(pCardSecondImg,pCardSecondValue);
         }
         // playerCounter = parseInt(playerCounter) + parseInt(`${deck[cardCount].value}`);
+        casinoCount();
         cardCount++;
 
         dealersDealtHand.push(deck[cardCount]);
@@ -100,6 +103,7 @@ function dealCards(){
             dealersUpValue = parseInt(dealersUpValue)+parseInt(`${deck[cardCount].value}`);
             dealerUp = cardCount;
         }
+        casinoCount();
         cardCount++;
     }
     delayTimer = .25;
@@ -170,11 +174,11 @@ function gameOver(){
             gameResults.innerHTML = 'You Win!<br />Player BlackJack';
             setTimeout(() => {overLay.style.display = 'unset';}, delayTimer*1000*2);
         } else {
-            console.log('Dealer, take a hit');
             function dealerHit(){
                 dealersHand.push(deck[cardCount]);
                 dealersHitCards.innerHTML += `<img src=PNG-cards/${deck[cardCount].number}_of_${deck[cardCount].suites}.png>`;
                 dealerValue.innerHTML = aceCheck(dealersHand);
+                casinoCount();
                 cardCount ++;
                 gameOver();
             }
@@ -214,6 +218,7 @@ function hit(){
         if(aceCheck(playersHand) >= 21){
             gameOver();
         }
+        casinoCount();
         cardCount++;
         cardCounter();
         playersHand = playersHand;
@@ -223,6 +228,19 @@ function stay(){
     if(gameStatus == 1){
         gameOver();
     }
+}
+function between(x, min, max) {
+    return x >= min && x <= max;
+  }
+function casinoCount(){
+    if(between(deck[cardCount].value, 2, 6)){
+        casinoCounter = casinoCounter+1;
+    } else if(between(deck[cardCount].value, 7, 9)){
+        casinoCounter = casinoCounter;
+    }  else {
+        casinoCounter = casinoCounter-1;
+    }
+    console.log('Current Card Count: '+casinoCounter)
 }
 hitButton.addEventListener('click',hit);
 stayButton.addEventListener('click',stay);
