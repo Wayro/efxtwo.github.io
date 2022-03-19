@@ -71,6 +71,7 @@ function dealCards(){
 		cardCount = 0;
 		initialGame = false;
         console.log('Deck Shuffled');
+        casinoCounter = 0;
 	}
     
     let pCardFirst = [];
